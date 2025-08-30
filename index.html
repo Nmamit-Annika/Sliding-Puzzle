@@ -174,8 +174,10 @@
       for (let row = 0; row < 3; row++) {
         for (let col = 0; col < 3; col++) {
           if (row === 2 && col === 2) continue; 
-          if (tiles[row][col].style.backgroundPosition !== positions[index]) {
-            return false;
+          let current = tiles[row][col].style.backgroundPosition.replace(/\s+/g, '');
+          let expected = positions[index].replace(/\s+/g, '');
+            if (current !== expected) {
+                return false;
           }
           index++;
         }
