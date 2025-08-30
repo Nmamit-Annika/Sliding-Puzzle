@@ -95,18 +95,24 @@
     }
     function moveTile(row,col){
         const rowDiff = Math.abs(row - emptyPos.row);
-        const colDiff = Math.abs(col - emptyPos.col);
-        if ((rowDiff + colDiff) === 1) {
-        const clickedTile = tiles[row][col];
-        const emptyTile = tiles[emptyPos.row][emptyPos.col];
-        emptyTile.style.backgroundPosition = clickedTile.style.backgroundPosition;
-        emptyTile.classList.remove("empty");
-        clickedTile.style.backgroundPosition = "";
-        clickedTile.classList.add("empty");
-        tiles[emptyPos.row][emptyPos.col] = emptyTile;
-        tiles[row][col] = clickedTile;
+  const colDiff = Math.abs(col - emptyPos.col);
 
-        emptyPos = { row, col };
+  if ((rowDiff + colDiff) === 1) {
+    const clickedTile = tiles[row][col];
+    const emptyTile = tiles[emptyPos.row][emptyPos.col];
+
+    emptyTile.style.backgroundPosition = clickedTile.style.backgroundPosition;
+    emptyTile.classList.remove("empty");
+    clickedTile.style.backgroundPosition = "";
+    clickedTile.classList.add("empty");
+
+    emptyTile.onclick = () => moveTile(emptyPos.row, emptyPos.col); 
+    clickedTile.onclick = null; 
+
+    tiles[emptyPos.row][emptyPos.col] = emptyTile;
+    tiles[row][col] = clickedTile;
+    emptyPos = { row, col };
+
         if (isSolved()) {
           setTimeout(() => alert("🎉 You completed the image!"), 200);
         }
