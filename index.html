@@ -22,22 +22,21 @@
       background: #333;
       padding: 5px;
       border-radius: 10px;
+      margin-bottom: 20px;
     }
 
     .tile {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 2rem;
-      font-weight: bold;
-      background: #6c63ff;
-      color: white;
+      width: 100px;
+      height: 100px;
+      background-image: url("puzzle.jpg"); 
+      background-size: 300px 300px;
       border-radius: 8px;
       cursor: pointer;
     }
 
     .empty {
       background: #ddd;
+      background-image: none;
       cursor: default;
     }
      button {
@@ -65,13 +64,17 @@
     let tiles = [];
     function initPuzzle(){
         puzzle.innerHTML = '';
-        for(let i=1; i<=8; i++){
-            const tile = document.createElement('div');
-            tile.className = 'tile';
-            tile.textContent = i;
-            puzzel.appendChild(tile);
-        }
-    
+        let positions = [
+        "0px 0px", "-100px 0px", "-200px 0px",
+        "0px -100px", "-100px -100px", "-200px -100px",
+        "0px -200px", "-100px -200px"
+      ];
+    for (let i = 0; i < 8; i++) {
+        const tile = document.createElement("div");
+        tile.className = "tile";
+        tile.style.backgroundPosition = positions[i];
+        puzzle.appendChild(tile);
+    }
     const emptyTile = document.createElement("div");
     emptyTile.className = "tile empty";
     puzzel.appendChild(emptyTile);
@@ -84,12 +87,17 @@
         tiles = Array.from(puzzle.children);
     }
     function isSolved(){
-        for(let i =0; i <8; i++){
-            if(tiles[i].textContent != i+1){
-                return false;
-            }
+        const positions = [
+        "0px 0px", "-100px 0px", "-200px 0px",
+        "0px -100px", "-100px -100px", "-200px -100px",
+        "0px -200px", "-100px -200px"
+      ];
+      for (let i = 0; i < 8; i++) {
+        if (tiles[i].style.backgroundPosition !== positions[i]) {
+          return false;
         }
-        return true;
+      }
+      return true;
     }
     puzzle.addEventListener("click", (e) => {
       const clickedTile = e.target; 
