@@ -11,7 +11,7 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background: #f0f0f0;
+      background: linear-gradient(135deg, #f0f0f0, #dcdcdc);
       font-family: Arial, sans-serif;
     }
 
@@ -29,6 +29,7 @@
   font-size: 1.2rem;
   font-weight: bold;
   color: green;
+  text-align: center;
 }
 
     .tile {
@@ -119,6 +120,8 @@
           tiles[row][col] = tile;
         }
       }
+      document.getElementById("message").textContent = "";
+
     }
 
     function moveTile(row, col) {
@@ -143,7 +146,8 @@
         emptyPos = { row, col };
 
         if (isSolved()) {
-          setTimeout(() => alert("🎉 You completed the image!"), 200);
+            document.getElementById("message").textContent = "🎉 You completed the image!";
+
         }
       }
     }
@@ -161,6 +165,8 @@
         const randomMove = validMoves[Math.floor(Math.random() * validMoves.length)];
         moveTile(randomMove.row, randomMove.col);
       }
+      document.getElementById("message").textContent = "";
+
     }
 
     function isSolved() {
