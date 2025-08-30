@@ -7,6 +7,7 @@
   <style>
     body {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
@@ -22,7 +23,6 @@
       background: #333;
       padding: 5px;
       border-radius: 10px;
-      margin-bottom: 20px;
     }
 
     .tile {
@@ -40,8 +40,15 @@
       border: 1px dashed #aaa;
       cursor: default;
     }
-     button {
+
+    .controls {
       margin-top: 20px;
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    button {
       padding: 10px 15px; 
       font-size: 1rem; 
       border: none;
@@ -54,80 +61,84 @@
     button:hover {
       background: #5548c8; 
     }
-    .controls {
-  margin-top: 20px;
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-}
-
   </style>
 </head>
 <body>
-  <div id="puzzle">
+  <div id="puzzle"></div>
+  <div class="controls">
+    <button onclick="shuffle()">Shuffle</button>
+    <button onclick="initPuzzle()">Restart</button>
   </div>
-  <div class = "controls">
-  <button onclick="shuffle()">Shuffle</button>
-  <button onclick="initPuzzle()">Restart</button> </div>
+
   <script>
     const puzzle = document.getElementById("puzzle"); 
     let tiles = [];
-    let emptyPos = {row:2, col:2};
+    let emptyPos = { row: 2, col: 2 };
     let positions = [];
-    function initPuzzle(){
-         puzzle.innerHTML = "";
-  tiles = [];
-  positions = [];
 
-  for (let row = 0; row < 3; row++) {
-    tiles[row] = [];
-    for (let col = 0; col < 3; col++) {
-      const tile = document.createElement("div");
+    function initPuzzle() {
+      puzzle.innerHTML = "";
+      tiles = [];
+      positions = [];
 
-      if (row === 2 && col === 2) {
-        tile.className = "tile empty";
-        emptyPos = { row, col };
-      } else {
-        tile.className = "tile";
-        let pos = `-${col * 100}px -${row * 100}px`;
-        tile.style.backgroundPosition = pos;
-        positions.push(pos);
+      for (let row = 0; row < 3; row++) {
+        tiles[row] = [];
+        for (let col = 0; col < 3; col++) {
+          const tile = document.createElement("div");
+
+          if (row === 2 && col === 2) {
+            tile.className = "tile empty";
+            emptyPos = { row, col };
+          } else {
+            tile.className = "tile";
+            let pos = `-${col * 100}px -${row * 100}px`;
+            tile.style.backgroundPosition = pos;
+            positions.push(pos);
+          }
+
+          // ✅ Attach click listener always
+          tile.addEventListener("click", () => moveTile(row, col));
+
+          puzzle.appendChild(tile);
+          tiles[row][col] = tile;
+        }
       }
-
-      tile.addEventListener("click", () => moveTile(row, col));
-
-      puzzle.appendChild(tile);
-      tiles[row][col] = tile;
     }
-  }
-    }
-    function moveTile(row,col){
-        const rowDiff = Math.abs(row - emptyPos.row);
-  const colDiff = Math.abs(col - emptyPos.col);
 
-  if ((rowDiff + colDiff) === 1) {
-    const clickedTile = tiles[row][col];
-    const emptyTile = tiles[emptyPos.row][emptyPos.col];
+    function moveTile(row, col) {
+      const rowDiff = Math.abs(row - emptyPos.row);
+      const colDiff = Math.abs(col - emptyPos.col);
 
-    emptyTile.style.backgroundPosition = clickedTile.style.backgroundPosition;
-    emptyTile.classList.remove("empty");
-    clickedTile.style.backgroundPosition = "";
-    clickedTile.classList.add("empty");
+      if ((rowDiff + colDiff) === 1) {
+        const clickedTile = tiles[row][col];
+        const emptyTile = tiles[emptyPos.row][emptyPos.col];
 
-    emptyTile.onclick = () => moveTile(emptyPos.row, emptyPos.col); 
+        // Swap backgrounds
+        emptyTile.style.backgroundPosition = clickedTile.style.backgroundPosition;
+        emptyTile.classList.remove("empty");
 
-    tiles[emptyPos.row][emptyPos.col] = emptyTile;
-    tiles[row][col] = clickedTile;
+        clickedTile.style.backgroundPosition = "";
+        clickedTile.classList.add("empty");
 
-    emptyPos = { row, col };
+        // ✅ Fix clickability
+        clickedTile.onclick = null; // new empty shouldn't be clickable
+        emptyTile.onclick = () => moveTile(emptyPos.row, emptyPos.col); // old empty is now clickable
+
+        // Update grid
+        tiles[emptyPos.row][emptyPos.col] = emptyTile;
+        tiles[row][col] = clickedTile;
+
+        // Update empty pos
+        emptyPos = { row, col };
+
         if (isSolved()) {
           setTimeout(() => alert("🎉 You completed the image!"), 200);
         }
       }
-
     }
-    function shuffle(){
-        for (let i = 0; i < 100; i++) {
+
+    function shuffle() {
+      for (let i = 0; i < 100; i++) {
         const moves = [
           { row: emptyPos.row - 1, col: emptyPos.col },
           { row: emptyPos.row + 1, col: emptyPos.col },
@@ -140,8 +151,9 @@
         moveTile(randomMove.row, randomMove.col);
       }
     }
-    function isSolved(){
-         let index = 0;
+
+    function isSolved() {
+      let index = 0;
       for (let row = 0; row < 3; row++) {
         for (let col = 0; col < 3; col++) {
           if (row === 2 && col === 2) continue; // skip empty
@@ -153,6 +165,7 @@
       }
       return true;
     }
+
     initPuzzle();
   </script>
 </body>
