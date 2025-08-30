@@ -1,7 +1,7 @@
 # Sliding Puzzle (3x3)
 
 A simple **sliding puzzle game** built with **HTML, CSS, and JavaScript**.  
-🔗 **Live Demo:** [Play the Puzzle Here] (https://<Nmamit-Annika>.github.io/sliding-puzzle/)
+🔗 **Live Demo:** [Play the Puzzle Here] (https://Nmamit-Annika.github.io/sliding-puzzle/)
 
 
 ---
