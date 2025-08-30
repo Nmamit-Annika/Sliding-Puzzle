@@ -111,8 +111,8 @@
             tile.className = "tile";
             let pos = `-${col * 100}px -${row * 100}px`;
             tile.style.backgroundPosition = pos;
-            positions.push(pos);
-          }
+            tile.dataset.correct = pos;       
+   }
 
           tile.addEventListener("click", () => moveTile(row, col));
 
@@ -174,11 +174,9 @@
       for (let row = 0; row < 3; row++) {
         for (let col = 0; col < 3; col++) {
           if (row === 2 && col === 2) continue; 
-          let current = tiles[row][col].style.backgroundPosition.replace(/\s+/g, '');
-          let expected = positions[index].replace(/\s+/g, '');
-            if (current !== expected) {
-                return false;
-          }
+          if (tiles[row][col].style.backgroundPosition !== tiles[row][col].dataset.correct) {
+        return false;
+      }
           index++;
         }
       }
