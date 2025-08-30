@@ -40,19 +40,80 @@
       background: #ddd;
       cursor: default;
     }
+     button {
+      padding: 10px 15px; 
+      font-size: 1rem; 
+      border: none;
+      border-radius: 5px; 
+      background: #6c63ff; 
+      color: white; 
+      cursor: pointer; 
+    }
+
+    button:hover {
+      background: #5548c8; 
+    }
   </style>
 </head>
 <body>
   <div id="puzzle">
-    <div class="tile">1</div>
-    <div class="tile">2</div>
-    <div class="tile">3</div>
-    <div class="tile">4</div>
-    <div class="tile">5</div>
-    <div class="tile">6</div>
-    <div class="tile">7</div>
-    <div class="tile">8</div>
-    <div class="tile empty"></div>
   </div>
+  <button onclick="shuffle()">Shuffle</button>
+  <script>
+    const puzzle = document.getElementById("puzzle"); 
+    let tiles = [];
+    function initPuzzle(){
+        puzzle.innerHTML = '';
+        for(let i=1; i<=8; i++){
+            const tile = document.createElement('div');
+            tile.className = 'tile';
+            tile.textContent = i;
+            puzzel.appendChild(tile);
+        }
+    
+    const emptyTile = document.createElement("div");
+    emptyTile.className = "tile empty";
+    puzzel.appendChild(emptyTile);
+    tiles = Array.from(puzzle.children); 
+    }
+    function shuffle(){
+        for(let i = puzzle.children.length; i >=0; i--){
+            puzzle.appendChild(puzzle.children[Math.random() * i | 0]);
+        }
+        tiles = Array.from(puzzle.children);
+    }
+    function isSolved(){
+        for(let i =0; i <8; i++){
+            if(tiles[i].textContent != i+1){
+                return false;
+            }
+        }
+        return true;
+    }
+    puzzle.addEventListener("click", (e) => {
+      const clickedTile = e.target; 
+
+      if (!clickedTile.classList.contains("tile") || clickedTile.classList.contains("empty")) {
+        return; 
+      }
+
+      const emptyTile = document.querySelector(".empty"); 
+
+      const clickedIndex = tiles.indexOf(clickedTile); 
+      const emptyIndex = tiles.indexOf(emptyTile); 
+
+      const validMoves = [emptyIndex - 1, emptyIndex + 1, emptyIndex - 3, emptyIndex + 3]; 
+
+      if (validMoves.includes(clickedIndex)) {
+        puzzle.insertBefore(clickedTile, emptyTile); 
+
+        tiles.splice(emptyIndex, 0, tiles.splice(clickedIndex, 1)[0]); 
+        if (isSolved()){
+            setTimeout(() => alert("🎉 You solved the puzzle!"), 200);
+        }
+      }
+    });
+    initPuzzle();
+  </script>
 </body>
 </html>
