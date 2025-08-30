@@ -96,7 +96,6 @@
             positions.push(pos);
           }
 
-          // ✅ Attach click listener always
           tile.addEventListener("click", () => moveTile(row, col));
 
           puzzle.appendChild(tile);
@@ -113,22 +112,17 @@
         const clickedTile = tiles[row][col];
         const emptyTile = tiles[emptyPos.row][emptyPos.col];
 
-        // Swap backgrounds
         emptyTile.style.backgroundPosition = clickedTile.style.backgroundPosition;
         emptyTile.classList.remove("empty");
 
         clickedTile.style.backgroundPosition = "";
         clickedTile.classList.add("empty");
 
-        // ✅ Fix clickability
-        clickedTile.onclick = null; // new empty shouldn't be clickable
-        emptyTile.onclick = () => moveTile(emptyPos.row, emptyPos.col); // old empty is now clickable
-
-        // Update grid
+        clickedTile.onclick = null; 
+        emptyTile.onclick = () => moveTile(emptyPos.row, emptyPos.col); 
         tiles[emptyPos.row][emptyPos.col] = emptyTile;
         tiles[row][col] = clickedTile;
 
-        // Update empty pos
         emptyPos = { row, col };
 
         if (isSolved()) {
@@ -156,7 +150,7 @@
       let index = 0;
       for (let row = 0; row < 3; row++) {
         for (let col = 0; col < 3; col++) {
-          if (row === 2 && col === 2) continue; // skip empty
+          if (row === 2 && col === 2) continue; 
           if (tiles[row][col].style.backgroundPosition !== positions[index]) {
             return false;
           }
