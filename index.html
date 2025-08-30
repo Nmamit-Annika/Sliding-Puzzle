@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sliding Puzzle</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #f0f0f0;
+      font-family: Arial, sans-serif;
+    }
+
+    #puzzle {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-template-rows: repeat(3, 100px);
+      gap: 5px;
+      background: #333;
+      padding: 5px;
+      border-radius: 10px;
+    }
+
+    .tile {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2rem;
+      font-weight: bold;
+      background: #6c63ff;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .empty {
+      background: #ddd;
+      cursor: default;
+    }
+  </style>
+</head>
+<body>
+  <div id="puzzle">
+    <div class="tile">1</div>
+    <div class="tile">2</div>
+    <div class="tile">3</div>
+    <div class="tile">4</div>
+    <div class="tile">5</div>
+    <div class="tile">6</div>
+    <div class="tile">7</div>
+    <div class="tile">8</div>
+    <div class="tile empty"></div>
+  </div>
+</body>
+</html>
