@@ -54,12 +54,21 @@
     button:hover {
       background: #5548c8; 
     }
+    .controls {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
   </style>
 </head>
 <body>
   <div id="puzzle">
   </div>
+  <div class = "controls">
   <button onclick="shuffle()">Shuffle</button>
+  <button onclick="initPuzzle()">Restart</button> </div>
   <script>
     const puzzle = document.getElementById("puzzle"); 
     let tiles = [];
@@ -107,12 +116,11 @@
     clickedTile.classList.add("empty");
 
     emptyTile.onclick = () => moveTile(emptyPos.row, emptyPos.col); 
-    clickedTile.onclick = null; 
 
     tiles[emptyPos.row][emptyPos.col] = emptyTile;
     tiles[row][col] = clickedTile;
-    emptyPos = { row, col };
 
+    emptyPos = { row, col };
         if (isSolved()) {
           setTimeout(() => alert("🎉 You completed the image!"), 200);
         }
