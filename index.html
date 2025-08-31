@@ -24,13 +24,14 @@
       padding: 5px;
       border-radius: 10px;
     }
+
     #message {
-  margin-top: 15px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: green;
-  text-align: center;
-}
+      margin-top: 15px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: green;
+      text-align: center;
+    }
 
     .tile {
       width: 100px;
@@ -40,10 +41,12 @@
       border-radius: 8px;
       cursor: pointer;
     }
+
     .tile:hover {
-  transform: scale(1.05);
-  transition: transform 0.2s ease;
-}
+      transform: scale(1.05);
+      transition: transform 0.2s ease;
+    }
+
     .empty {
       background: none;
       background-image: none;
@@ -71,12 +74,14 @@
     button:hover {
       background: #5548c8; 
     }
-    .title{
+
+    .title {
       margin-bottom: 20px;
       font-size: 2rem;
-      font-weight:bold;
+      font-weight: bold;
       color: #333;
-      text-align: center;}
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -92,13 +97,13 @@
     const puzzle = document.getElementById("puzzle"); 
     let tiles = [];
     let emptyPos = { row: 2, col: 2 };
-    let positions = [];
 
     function initPuzzle() {
       puzzle.innerHTML = "";
       tiles = [];
-      positions = [];
+      document.getElementById("message").textContent = "";
 
+      let id = 1; // tile IDs go 1–8
       for (let row = 0; row < 3; row++) {
         tiles[row] = [];
         for (let col = 0; col < 3; col++) {
@@ -109,10 +114,11 @@
             emptyPos = { row, col };
           } else {
             tile.className = "tile";
+            tile.dataset.id = id; // assign ID
             let pos = `-${col * 100}px -${row * 100}px`;
             tile.style.backgroundPosition = pos;
-            tile.dataset.correct = pos;       
-   }
+            id++;
+          }
 
           tile.addEventListener("click", () => moveTile(row, col));
 
@@ -120,8 +126,6 @@
           tiles[row][col] = tile;
         }
       }
-      document.getElementById("message").textContent = "";
-
     }
 
     function moveTile(row, col) {
@@ -132,22 +136,22 @@
         const clickedTile = tiles[row][col];
         const emptyTile = tiles[emptyPos.row][emptyPos.col];
 
+        // swap background
         emptyTile.style.backgroundPosition = clickedTile.style.backgroundPosition;
+        emptyTile.dataset.id = clickedTile.dataset.id; // swap ID
         emptyTile.classList.remove("empty");
 
         clickedTile.style.backgroundPosition = "";
+        delete clickedTile.dataset.id;
         clickedTile.classList.add("empty");
 
-        clickedTile.onclick = null; 
-        emptyTile.onclick = () => moveTile(emptyPos.row, emptyPos.col); 
         tiles[emptyPos.row][emptyPos.col] = emptyTile;
         tiles[row][col] = clickedTile;
 
         emptyPos = { row, col };
 
         if (isSolved()) {
-            document.getElementById("message").textContent = "🎉 You completed the image!";
-
+          document.getElementById("message").textContent = "🎉 You completed the image!";
         }
       }
     }
@@ -160,30 +164,27 @@
           { row: emptyPos.row, col: emptyPos.col - 1 },
           { row: emptyPos.row, col: emptyPos.col + 1 }
         ];
-
         const validMoves = moves.filter(m => m.row >= 0 && m.row < 3 && m.col >= 0 && m.col < 3);
         const randomMove = validMoves[Math.floor(Math.random() * validMoves.length)];
         moveTile(randomMove.row, randomMove.col);
       }
       document.getElementById("message").textContent = "";
-
     }
 
     function isSolved() {
-    for (let row = 0; row < 3; row++) {
-    for (let col = 0; col < 3; col++) {
-      if (row === 2 && col === 2) continue; // skip empty
-      
-      let expected = `-${col * 100}px -${row * 100}px`;  // correct slice for this cell
-      let current = tiles[row][col].style.backgroundPosition;
-
-      if (current !== expected) {
-        return false;
+      let id = 1;
+      for (let row = 0; row < 3; row++) {
+        for (let col = 0; col < 3; col++) {
+          if (row === 2 && col === 2) continue; // skip empty
+          if (tiles[row][col].dataset.id != id) {
+            return false;
+          }
+          id++;
+        }
       }
+      return true;
     }
-  }
-  return true;
-}
+
     initPuzzle();
   </script>
 </body>
