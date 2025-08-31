@@ -170,21 +170,20 @@
     }
 
     function isSolved() {
+    for (let row = 0; row < 3; row++) {
+    for (let col = 0; col < 3; col++) {
+      if (row === 2 && col === 2) continue; // skip empty
       
-      for (let row = 0; row < 3; row++) {
-        for (let col = 0; col < 3; col++) {
-          if (row === 2 && col === 2) continue; 
-         let expected = `-${col * 100}px -${row * 100}px`;
+      let expected = `-${col * 100}px -${row * 100}px`;  // correct slice for this cell
+      let current = tiles[row][col].style.backgroundPosition;
 
-          if (tiles[row][col].style.backgroundPosition !== tiles[row][col].expected) {
+      if (current !== expected) {
         return false;
       }
-          
-        }
-      }
-      return true;
     }
-
+  }
+  return true;
+}
     initPuzzle();
   </script>
 </body>
