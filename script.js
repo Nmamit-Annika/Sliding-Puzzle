@@ -51,7 +51,7 @@ function moveTile(row, col) {
 
     clickedTile.style.backgroundImage = "";
     delete clickedTile.dataset.id;
-    clickedTile.className = "w-[100px] h-[100px] rounded-md border border-dashed border-gray-300 dark:border-gray-600 bg-transparent flex items-center justify-center empty";
+    clickedTile.className = "w-[100px] h-[100px] rounded-md border border-gray-300 dark:border-gray-600 bg-transparent flex items-center justify-center empty";
 
     tiles[emptyPos.row][emptyPos.col] = emptyTile;
     tiles[row][col] = clickedTile;
