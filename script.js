@@ -1,4 +1,4 @@
-const puzzle = document.getElementById("puzzle"); 
+const puzzle = document.getElementById("puzzle");
 let tiles = [];
 let emptyPos = { row: 2, col: 2 };
 
@@ -14,13 +14,15 @@ function initPuzzle() {
       const tile = document.createElement("div");
 
       if (row === 2 && col === 2) {
-        tile.className = "tile empty";
+        tile.className = "w-[100px] h-[100px] rounded-md border border-dashed border-gray-300 dark:border-gray-600 bg-transparent flex items-center justify-center";
+        tile.classList.add("empty");
         emptyPos = { row, col };
       } else {
-        tile.className = "tile";
-        tile.dataset.id = id;
-        let pos = `-${col * 100}px -${row * 100}px`;
+        tile.className = "w-[100px] h-[100px] rounded-md bg-cover cursor-pointer";
+        tile.dataset.id = id;        let pos = `-${col * 100}px -${row * 100}px`;
+        tile.style.backgroundImage = 'url("puzzle.jpg")';
         tile.style.backgroundPosition = pos;
+        tile.style.backgroundSize = "300px 300px";
         id++;
       }
 
@@ -40,13 +42,16 @@ function moveTile(row, col) {
     const clickedTile = tiles[row][col];
     const emptyTile = tiles[emptyPos.row][emptyPos.col];
 
-    emptyTile.style.backgroundPosition = clickedTile.style.backgroundPosition;
-    emptyTile.dataset.id = clickedTile.dataset.id; 
+    emptyTile.style.backgroundImage = clickedTile.style.backgroundImage || "";
+    emptyTile.style.backgroundPosition = clickedTile.style.backgroundPosition || "";
+    emptyTile.style.backgroundSize = clickedTile.style.backgroundSize || "";
+    emptyTile.dataset.id = clickedTile.dataset.id;
     emptyTile.classList.remove("empty");
+    emptyTile.classList.add("w-[100px]", "h-[100px]", "rounded-md", "bg-cover", "cursor-pointer");
 
-    clickedTile.style.backgroundPosition = "";
+    clickedTile.style.backgroundImage = "";
     delete clickedTile.dataset.id;
-    clickedTile.classList.add("empty");
+    clickedTile.className = "w-[100px] h-[100px] rounded-md border border-dashed border-gray-300 dark:border-gray-600 bg-transparent flex items-center justify-center empty";
 
     tiles[emptyPos.row][emptyPos.col] = emptyTile;
     tiles[row][col] = clickedTile;
@@ -78,7 +83,7 @@ function isSolved() {
   let id = 1;
   for (let row = 0; row < 3; row++) {
     for (let col = 0; col < 3; col++) {
-      if (row === 2 && col === 2) continue; 
+      if (row === 2 && col === 2) continue;
       if (tiles[row][col].dataset.id != id) {
         return false;
       }
@@ -87,5 +92,8 @@ function isSolved() {
   }
   return true;
 }
+
+document.getElementById("shuffleBtn").addEventListener("click", shuffle);
+document.getElementById("restartBtn").addEventListener("click", initPuzzle);
 
 initPuzzle();
