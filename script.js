@@ -14,7 +14,7 @@ function initPuzzle() {
       const tile = document.createElement("div");
 
       if (row === 2 && col === 2) {
-        tile.className = "w-[100px] h-[100px] rounded-md border border-dashed border-gray-300 dark:border-gray-600 bg-transparent flex items-center justify-center";
+        tile.className = "w-[100px] h-[100px] rounded-md border border-gray-300 dark:border-gray-600 bg-transparent flex items-center justify-center";
         tile.classList.add("empty");
         emptyPos = { row, col };
       } else {
